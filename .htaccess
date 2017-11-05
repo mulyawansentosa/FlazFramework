@@ -1,8 +1,6 @@
 Options +FollowSymLinks
 <IfModule mod_rewrite.c>
 	RewriteEngine On
-	
-
 	RewriteCond $1 !^(index\.php|styles|scripts|images|robots\.txt)
 	RewriteCond %{REQUEST_FILENAME} !-d
 	RewriteCond %{REQUEST_FILENAME} !-f

@@ -8,25 +8,29 @@ class fe{
 		include "fe_controller.php";
 		include "fe_model.php";
 		include "fe_view.php";
-		$this->include_mvc();
+		//$this->include_mvc();
 
   	}
 
   	function run(){
 		if($this->page()){
-			if($this->check_class(0)){
-				if(!$this->check_method(0,1)){
-					echo "Method Not Found";
-				}else{
-					$classname 	= 'fec_'.$this->uri_segment(0);
-					$def 	 	= new $classname();
-					/*
+			$page 	= $this->uri_segment(0);
+			if($this->check_controller_file($page)){
+				$this->include_controller_class($page);
+				$classname 		= 'fec_'.$page;
+				$class_file 	= new $classname();
+				if($this->check_method(0,1)){
 					$methodname = $this->uri_segment(1);
-					$default->$methodname();
-					*/
+					$class_file->$methodname();
+				}else{
+					if($this->check_method_name($page,'index')){
+						$class_file->index();
+					}else{
+						echo "Default Method is not found";									
+					}
 				}
 			}else{
-				echo "No Controller Found";
+				echo "Controller is not found";
 			}
 		}else{
 			$this->default_controller();
@@ -51,19 +55,67 @@ class fe{
 	    return $dir_array;
 	}
 
-	function include_mvc(){
+	function check_controller_file($controller){
+		if(file_exists(fe_project_dir.'/'.$controller.'/fec_'.$controller.'.php')){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	function include_controller_class($class){
 		$folder_list = array();
-		$folder_list = $this->dir_list("project", $folder_list);
+		$folder_list = $this->dir_list(fe_project_dir,$folder_list);
 		foreach($folder_list as $key => $val){
 			foreach($folder_list[$key] as $val1){
-				if(file_exists($key.'/'.$val1.'/fec_'.$val1.'.php')){
-					include $key.'/'.$val1.'/fec_'.$val1.'.php';
+				if($val1 === $class){
+					if(file_exists($key.'/'.$val1.'/fec_'.$val1.'.php')){
+						include $key.'/'.$val1.'/fec_'.$val1.'.php';
+					}
 				}
-				if(file_exists($key.'/'.$val1.'/fem_'.$val1.'.php')){
-					include $key.'/'.$val1.'/fem_'.$val1.'.php';
+			}
+		}	
+	}
+
+	function check_model_file($controller){
+		if(file_exists(fe_project_dir.'/'.$controller.'/fem_'.$controller.'.php')){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	function include_model_class($dir,$class){
+		$folder_list = array();
+		$folder_list = $this->dir_list($dir, $folder_list);
+		foreach($folder_list as $key => $val){
+			foreach($folder_list[$key] as $val1){
+				if($val1 === $class){
+					if(file_exists($key.'/'.$val1.'/fem_'.$val1.'.php')){
+						include $key.'/'.$val1.'/fem_'.$val1.'.php';
+					}
 				}
-				if(file_exists($key.'/'.$val1.'/fev_'.$val1.'.php')){
-					include $key.'/'.$val1.'/fev_'.$val1.'.php';
+			}
+		}	
+	}
+
+	function check_view_file($controller){
+		if(file_exists(fe_project_dir.'/'.$controller.'/fev_'.$controller.'.php')){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	function include_view_class($dir,$class){
+		$folder_list = array();
+		$folder_list = $this->dir_list($dir, $folder_list);
+		foreach($folder_list as $key => $val){
+			foreach($folder_list[$key] as $val1){
+				if($val1 === $class){
+					if(file_exists($key.'/'.$val1.'/fev_'.$val1.'.php')){
+						include $key.'/'.$val1.'/fev_'.$val1.'.php';
+					}
 				}
 			}
 		}	
@@ -159,14 +211,21 @@ class fe{
 	}
 
 	function default_controller(){
-		if($this->check_class_name(fe_default_root)){
-			if($this->check_method_name(fe_default_root,'index')){
-				header('Location: '.fe_default_root.'/index');
+		if($this->check_controller_file(fe_default_root)){
+			$this->include_controller_class(fe_default_root);
+			if($this->check_class_name(fe_default_root)){
+				if($this->check_method_name(fe_default_root,'index')){
+					$classname 		= 'fec_'.fe_default_root;
+					$class_file 	= new $classname();
+					$class_file->index();
+				}else{
+					echo "Default Method is not found";									
+				}
 			}else{
-				echo "No Default Method Specify";
+				echo "Default Controller is not found";				
 			}
 		}else{
-			echo "This Controller is not defined";
+				echo "Default Controller is not found";
 		}
 	}
 }

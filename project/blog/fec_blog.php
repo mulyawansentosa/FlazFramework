@@ -8,6 +8,10 @@ class fec_blog extends fe_controller{
 
   	function index(){
   		echo "Hello";
-  	}
+	}
+	  
+	function coba(){
+		echo "Coba Lagi Dah";
+	}
 }
 ?>
