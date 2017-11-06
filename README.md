@@ -3,7 +3,7 @@ Minify Framework
 
 FlazFramework is a minify framework. This is very easy to use and small. Best for simple and middle application.
 
-The MIT License (MIT)
+<b>The MIT License (MIT)</b>
 
 Copyright (c) 2017, Flaz Corporation
 
