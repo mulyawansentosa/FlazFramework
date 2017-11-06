@@ -3,12 +3,19 @@ if(count(get_included_files()) ==1)exit("<meta http-equiv='refresh' content='0;u
 
 class fem_blog extends fe_model{
 	
-	public function __construct(){
+	function __construct(){
 		parent::__construct();
 	}
 
-	public function test(){
+	function test(){
 		echo "Ini Model";
 	}
+
+	function get_data(){
+		$data['nama'] 	= "Mulyawan Sentosa";
+		$data['alamat']	= "Rangkasbitung";
+		return $data;		
+	}
+	
 }
 ?>

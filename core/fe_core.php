@@ -69,16 +69,8 @@ class fe_core extends fe{
 		}	
 	}
 
-	public function check_class($segment){
-		if(in_array('fec_'.$this->uri->segment($segment),get_declared_classes())){
-			return true;
-		}else{
-			return false;
-		}
-	}
-
-	public function check_class_name($class){
-		if(in_array('fec_'.$class,get_declared_classes())){
+	public function check_class($class){
+		if(in_array($class,get_declared_classes())){
 			return true;
 		}else{
 			return false;
@@ -86,15 +78,7 @@ class fe_core extends fe{
 	}
 
 	public function check_method($class,$method){
-		if(in_array($this->uri->segment($method),get_class_methods('fec_'.$this->uri->segment($class)))){
-			return true;
-		}else{
-			return false;
-		}
-	}
-
-	public function check_method_name($class,$method){
-		if(in_array($method,get_class_methods('fec_'.$class))){
+		if(in_array($method,get_class_methods($class))){
 			return true;
 		}else{
 			return false;
@@ -102,10 +86,16 @@ class fe_core extends fe{
 	}
 
 	public function default_controller(){
+		//Check to include model
+		if($this->check_model_file(fe_default_root)){
+			$this->include_model_file(fe_default_root);
+		}
+
+		//Check to include controller file
 		if($this->check_controller_file(fe_default_root)){
 			$this->include_controller_file(fe_default_root);
-			if($this->check_class_name(fe_default_root)){
-				if($this->check_method_name(fe_default_root,'index')){
+			if($this->check_class('fec_'.fe_default_root)){
+				if($this->check_method('fec_'.fe_default_root,'index')){
 					$classname 		= 'fec_'.fe_default_root;
 					$class_file 	= new $classname();
 					$class_file->index();

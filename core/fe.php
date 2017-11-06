@@ -51,19 +51,18 @@ class fe{
   	public function run(){
 		if($this->uri->cont()){
 			$page 	= $this->uri->segment(0);
+			//Include Controller if Exist
 			if($this->core->check_controller_file($page)){
 				$this->core->include_controller_file($page);
-				if($this->core->check_class_name($page)){
+				if($this->core->check_class('fec_'.$page)){
 					$this->core->include_model_file($page);
 					$classname 		= 'fec_'.$page;
-					$this->controllername 	= $page;
 					$class_file 	= new $classname();
-					if($this->core->check_method(0,1)){
+					if($this->core->check_method('fec_'.$this->uri->segment(0),$this->uri->segment(1))){
 						$method = $this->uri->segment(1);
-						$this->methodname 	= $method;
 						$class_file->$method();
 					}else{
-						if($this->core->check_method_name($page,'index')){
+						if($this->core->check_method('fec_'.$page,'index')){
 							$class_file->index();
 						}else{
 							echo "Default Method is not found";									
