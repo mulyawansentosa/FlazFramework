@@ -2,16 +2,28 @@
 if(count(get_included_files()) ==1)exit("<meta http-equiv='refresh' content='0;url="."http://".$_SERVER['SERVER_NAME']."'>");
 
 class fec_blog extends fe_controller{
-	function __construct(){
-	    parent::__construct();
-  	}
+	
+	public function __construct(){
 
-  	function index(){
+	}
+
+	public function index(){
   		echo "Hello";
 	}
 	  
-	function coba(){
-		echo "Coba Lagi Dah";
+	public function model(){
+		$model 		= new fem_blog();
+		$model->test();
+	}
+
+	public function tampilkan(){
+		$data['nama'] 	= "Mulyawan Sentosa";
+		$data['alamat']	= "Rangkasbitung";
+
+		$view 			= new fe_view();		
+		$view->load('design/kepala.php',$data);
+		$view->load('design/tengah.php',$data);
+		$view->load('design/kaki.php',$data);
 	}
 }
 ?>

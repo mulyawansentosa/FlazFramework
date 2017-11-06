@@ -6,11 +6,7 @@ class fe_controller extends fe{
 	function __construct(){
 
 	}
-	  
-  	function run(){
-
-	}
-	  
+	  	  
 }
 
 ?>

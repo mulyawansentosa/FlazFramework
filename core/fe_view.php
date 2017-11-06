@@ -3,12 +3,18 @@ if(count(get_included_files()) ==1)exit("<meta http-equiv='refresh' content='0;u
 
 class fe_view extends fe{
 
-	function __construct(){
+	private $controller;
 
+	function __construct(){
+		parent::uri();
+		parent::html();
 	}
 
-	function run(){
-
+	public function load($file,$data){
+		foreach($data as $key => $val){
+			${$key} 	= $val;
+		}
+		include fe_project_dir.'/'.$this->uri->cont().'/'.$file;
 	}
 }
 ?>
