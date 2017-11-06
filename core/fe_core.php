@@ -85,6 +85,37 @@ class fe_core extends fe{
 		}
 	}
 
+	function execute(){
+		if($this->uri->cont()){
+			$page 	= $this->uri->segment(0);
+			//Include Controller if Exist
+			if($this->check_controller_file($page)){
+				$this->include_controller_file($page);
+				if($this->check_class('fec_'.$page)){
+					$this->include_model_file($page);
+					$classname 		= 'fec_'.$page;
+					$class_file 	= new $classname();
+					if($this->check_method('fec_'.$this->uri->segment(0),$this->uri->segment(1))){
+						$method = $this->uri->segment(1);
+						$class_file->$method();
+					}else{
+						if($this->check_method('fec_'.$page,'index')){
+							$class_file->index();
+						}else{
+							echo "Default Method is not found";									
+						}
+					}	
+				}else{
+					echo "Controller is not found";					
+				}
+			}else{
+				echo "Controller is not found";
+			}
+		}else{
+			$this->default_controller();
+		}		
+	}
+
 	public function default_controller(){
 		//Check to include model
 		if($this->check_model_file(fe_default_root)){
